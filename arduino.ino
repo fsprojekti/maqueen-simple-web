@@ -4,8 +4,8 @@
 
 DFRobot_MaqueenPlus maqueenPlus(22, 21);
 
-const char* ssid = "mr. Corn";
-const char* password = "9d0e8ace";
+const char* ssid = "TP-LINK_0B69";
+const char* password = "29295820";
 
 WebSocketsServer webSocket(81);
 
