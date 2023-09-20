@@ -152,11 +152,11 @@
 			<button onmousedown="handleMouseDown('forward')"  onmouseup="handleMouseUp()"  ontouchstart="handleTouchStart(event, 'forward')" ontouchend="handleTouchEnd(event)" >Forward</button>
 
 			<div id="horizontal-buttons">
-				<button onmousedown="startSendingCommand('left')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('left')" ontouchend="stopSendingCommand()">Left</button>
-				<button onmousedown="startSendingCommand('stop')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('stop')" ontouchend="stopSendingCommand()">Stop</button>
-				<button onmousedown="startSendingCommand('right')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('right')" ontouchend="stopSendingCommand()">Right</button>
+				<button onmousedown="handleMouseDown('left')"  onmouseup="handleMouseUp()"  ontouchstart="handleTouchStart(event, 'left')" ontouchend="handleTouchEnd(event)" >Left</button>
+				<button onmousedown="handleMouseDown('stop')"  onmouseup="handleMouseUp()"  ontouchstart="handleTouchStart(event, 'stop')" ontouchend="handleTouchEnd(event)" >Stop</button>
+				<button onmousedown="handleMouseDown('right')"  onmouseup="handleMouseUp()"  ontouchstart="handleTouchStart(event, 'right')" ontouchend="handleTouchEnd(event)" >Right</button>
 			</div>
-			<button onmousedown="startSendingCommand('back')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('back')" ontouchend="stopSendingCommand()">Back</button>
+			<button onmousedown="handleMouseDown('back')"  onmouseup="handleMouseUp()"  ontouchstart="handleTouchStart(event, 'back')" ontouchend="handleTouchEnd(event)">Back</button>
 		</div>
 
 
