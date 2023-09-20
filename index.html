@@ -98,17 +98,29 @@
 			}, 200);
 		}
 
-		function stopSendingCommand() {
-			clearInterval(commandInterval);
-			sendCommand('stop');
+		function handleMouseDown(command) {
+			if (isMobileDevice()) return; // Don't run if on mobile
+			startSendingCommand(command);
 		}
 
-        function sendCommand(command) {
-            const speed = document.getElementById("speed-slider").value;
-            const message = `${command},${speed}`;
-            console.log("Sending command:", message);
-            socket.send(message);
-        }
+		function handleMouseUp() {
+			if (isMobileDevice()) return; // Don't run if on mobile
+			stopSendingCommand();
+		}
+
+		function handleTouchStart(event, command) {
+			event.preventDefault(); // Prevent mouse events from being triggered
+			startSendingCommand(command);
+		}
+
+		function handleTouchEnd(event) {
+			event.preventDefault(); // Prevent mouse events from being triggered
+			stopSendingCommand();
+		}
+
+		function isMobileDevice() {
+			return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+		}
     </script>
 </head>
 <body>
@@ -121,7 +133,7 @@
 			<button onclick="disconnectFromWebSocket()">Disconnect</button>
 		</div>
         <div id="control-buttons">
-			<button onmousedown="startSendingCommand('forward')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('forward')" ontouchend="stopSendingCommand()">Forward</button>
+			<button <button onmousedown="handleMouseDown('forward')"  onmouseup="handleMouseUp()"  ontouchstart="handleTouchStart(event, 'forward')" ontouchend="handleTouchEnd(event)">Forward</button>
 			<div id="horizontal-buttons">
 				<button onmousedown="startSendingCommand('left')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('left')" ontouchend="stopSendingCommand()">Left</button>
 				<button onmousedown="startSendingCommand('stop')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('stop')" ontouchend="stopSendingCommand()">Stop</button>
