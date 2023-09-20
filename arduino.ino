@@ -20,19 +20,19 @@ void handleCommand(const String& command, int speed) {
     } else if (command == "left") {
         // Turn left at the specified speed
         Serial.println("Executing left command.");
-        maqueenPlus.motorControl(maqueenPlus.eRIGHT, maqueenPlus.eCCW, 30);
-        maqueenPlus.motorControl(maqueenPlus.eLEFT, maqueenPlus.eCW, 30);
+        maqueenPlus.motorControl(maqueenPlus.eRIGHT, maqueenPlus.eCCW, 50);
+        maqueenPlus.motorControl(maqueenPlus.eLEFT, maqueenPlus.eCW, 50);
         // Implement logic here
     } else if (command == "right") {
         // Turn right at the specified speed
         Serial.println("Executing right command.");
-        maqueenPlus.motorControl(maqueenPlus.eRIGHT, maqueenPlus.eCW, 30);
-        maqueenPlus.motorControl(maqueenPlus.eLEFT, maqueenPlus.eCCW, 30);
+        maqueenPlus.motorControl(maqueenPlus.eRIGHT, maqueenPlus.eCW, 50);
+        maqueenPlus.motorControl(maqueenPlus.eLEFT, maqueenPlus.eCCW, 50);
         // Implement logic here
     } else if (command == "back") {
         // Move back at the specified speed
         Serial.println("Executing back command.");
-         maqueenPlus.motorControl(maqueenPlus.eALL, maqueenPlus.eCW, 50);
+         maqueenPlus.motorControl(maqueenPlus.eALL, maqueenPlus.eCW, speed);
         // Implement logic here
     } else if (command == "stop") {
         // Stop
