@@ -82,6 +82,17 @@
 			}
 		}
 		
+		function sendCommand(command) {
+			if (!socket || socket.readyState !== WebSocket.OPEN) {
+				alert("Please connect to WebSocket server first!");
+				return;
+			}
+			const speed = document.getElementById("speed-slider").value;
+			const message = `${command},${speed}`;
+			console.log("Sending command:", message);
+			socket.send(message);
+		}
+		
 		let commandInterval;
 
 		function startSendingCommand(command) {
@@ -96,6 +107,11 @@
 			commandInterval = setInterval(() => {
 				sendCommand(command);
 			}, 200);
+		}
+		
+		function stopSendingCommand() {
+			clearInterval(commandInterval);
+			sendCommand('stop');
 		}
 
 		function handleMouseDown(command) {
@@ -133,7 +149,8 @@
 			<button onclick="disconnectFromWebSocket()">Disconnect</button>
 		</div>
         <div id="control-buttons">
-			<button <button onmousedown="handleMouseDown('forward')"  onmouseup="handleMouseUp()"  ontouchstart="handleTouchStart(event, 'forward')" ontouchend="handleTouchEnd(event)">Forward</button>
+			<button onmousedown="handleMouseDown('forward')"  onmouseup="handleMouseUp()"  ontouchstart="handleTouchStart(event, 'forward')" ontouchend="handleTouchEnd(event)" >Forward</button>
+
 			<div id="horizontal-buttons">
 				<button onmousedown="startSendingCommand('left')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('left')" ontouchend="stopSendingCommand()">Left</button>
 				<button onmousedown="startSendingCommand('stop')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('stop')" ontouchend="stopSendingCommand()">Stop</button>
@@ -141,6 +158,7 @@
 			</div>
 			<button onmousedown="startSendingCommand('back')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('back')" ontouchend="stopSendingCommand()">Back</button>
 		</div>
+
 
         <div id="speed-control">
             <label for="speed-slider">Speed:</label>
