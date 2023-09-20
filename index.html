@@ -32,30 +32,76 @@
         }
     </style>
     <script>
-        let socket = new WebSocket("ws://192.168.4.236:81");
+        //let socket = new WebSocket("ws://192.168.0.115:81");
+		
+		let socket;
+		
+		function connectToWebSocket() {
+			const ip = document.getElementById("ip-input").value;
+			if (!ip) return alert("Please enter a valid IP address!");
 
-        socket.onopen = function(e) {
-            console.log("WebSocket connection opened:", e);
-            document.getElementById("status").innerText = "Connected to ESP32!";
-        };
+			if (socket && socket.readyState !== WebSocket.CLOSED) {
+				socket.close();
+			}
 
-        socket.onmessage = function(event) {
-            console.log("Received message from server:", event.data);
-            document.getElementById("status").innerText = event.data;
-        };
+			socket = new WebSocket(`ws://${ip}:81`);
+			
+				// Your WebSocket event listeners...
+				socket.onopen = function(e) {
+				console.log("WebSocket connection opened:", e);
+				document.getElementById("status").innerText = "Connected to ESP32!";
+			};
 
-        socket.onerror = function(error) {
-            console.error("WebSocket error:", error);
-            document.getElementById("status").innerText = "Error occurred.";
-        };
+			socket.onmessage = function(event) {
+				console.log("Received message from server:", event.data);
+				document.getElementById("status").innerText = event.data;
+			};
 
-        socket.onclose = function(event) {
-            if (event.wasClean) {
-                console.log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
-            } else {
-                console.error('Connection died unexpectedly');
-            }
-        };
+			socket.onerror = function(error) {
+				console.error("WebSocket error:", error);
+				document.getElementById("status").innerText = "Error occurred.";
+			};
+
+			socket.onclose = function(event) {
+				if (event.wasClean) {
+					console.log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+				} else {
+					console.error('Connection died unexpectedly');
+				}
+			};
+
+			document.getElementById("status").innerText = `Trying to connect to ${ip}...`;
+		}
+		
+		function disconnectFromWebSocket() {
+			if (socket && socket.readyState !== WebSocket.CLOSED) {
+				socket.close();
+				document.getElementById("status").innerText = "Disconnected from ESP32.";
+			} else {
+				alert("You're not connected to any WebSocket server.");
+			}
+		}
+		
+		let commandInterval;
+
+		function startSendingCommand(command) {
+			if (!socket || socket.readyState !== WebSocket.OPEN) {
+				alert("Please connect to WebSocket server first!");
+				return;
+			}
+
+			sendCommand(command);
+
+			// Repeat the command every 200ms (can adjust this value as needed)
+			commandInterval = setInterval(() => {
+				sendCommand(command);
+			}, 200);
+		}
+
+		function stopSendingCommand() {
+			clearInterval(commandInterval);
+			sendCommand('stop');
+		}
 
         function sendCommand(command) {
             const speed = document.getElementById("speed-slider").value;
@@ -68,15 +114,22 @@
 <body>
     <h2>ESP32 Controller</h2>
     <div id="container">
+		<div id="ip-control">
+			<label for="ip-input">Robot Car IP:</label>
+			<input id="ip-input" type="text" placeholder="Enter Robot Car IP">
+			<button onclick="connectToWebSocket()">Connect</button>
+			<button onclick="disconnectFromWebSocket()">Disconnect</button>
+		</div>
         <div id="control-buttons">
-            <button onclick="sendCommand('forward')">Forward</button>
-            <div id="horizontal-buttons">
-                <button onclick="sendCommand('left')">Left</button>
-                <button onclick="sendCommand('stop')">Stop</button>
-                <button onclick="sendCommand('right')">Right</button>
-            </div>
-            <button onclick="sendCommand('back')">Back</button>
-        </div>
+			<button onmousedown="startSendingCommand('forward')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('forward')" ontouchend="stopSendingCommand()">Forward</button>
+			<div id="horizontal-buttons">
+				<button onmousedown="startSendingCommand('left')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('left')" ontouchend="stopSendingCommand()">Left</button>
+				<button onmousedown="startSendingCommand('stop')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('stop')" ontouchend="stopSendingCommand()">Stop</button>
+				<button onmousedown="startSendingCommand('right')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('right')" ontouchend="stopSendingCommand()">Right</button>
+			</div>
+			<button onmousedown="startSendingCommand('back')" onmouseup="stopSendingCommand()" ontouchstart="startSendingCommand('back')" ontouchend="stopSendingCommand()">Back</button>
+		</div>
+
         <div id="speed-control">
             <label for="speed-slider">Speed:</label>
             <input id="speed-slider" type="range" min="0" max="255" value="50">
@@ -91,5 +144,6 @@
             document.getElementById("speed-display").textContent = this.value;
         });
     </script>
+		
 </body>
 </html>
