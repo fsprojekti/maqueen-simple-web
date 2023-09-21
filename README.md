@@ -5,4 +5,4 @@ Before using
 * change IP in index.hmtl file --> IP address can now be set directly in the website
 * to move the car keep the button (Forward, Back, Left, Right) pressed
 * the app works fine on computer by using the onmousedown and onmouseup events
-* for mobile phones 
+* for mobile phones ontouchstart and ontouchend events are used but this is not working properly --> test and improve
